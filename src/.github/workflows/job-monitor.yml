@@ -1,0 +1,32 @@
+name: Job Monitor
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - run: mvn clean package -DskipTests
+
+      - run: java -jar target/job-monitor-0.0.1-SNAPSHOT.jar
+
+      - name: Commit DB changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add jobs.db
+          git commit -m "update database" || echo "no changes"
+          git push
