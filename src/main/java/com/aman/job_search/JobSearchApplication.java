@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JobSearchApplication implements CommandLineRunner {
 
     @Autowired
-    JobProcessorService processor;
+    private JobProcessorService processor;
 
     public static void main(String[] args) {
         SpringApplication.run(JobSearchApplication.class, args);

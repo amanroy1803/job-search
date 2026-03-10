@@ -3,6 +3,7 @@ package com.aman.job_search.service;
 import com.aman.job_search.model.Job;
 import com.aman.job_search.utils.JobFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -12,12 +13,16 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RequiredArgsConstructor
 public class JobProcessorService {
 
-    private final JobFetcherService fetcher;
-    private final DatabaseService database;
-    private final TelegramService telegram;
+    @Autowired
+    JobFetcherService fetcher;
+
+    @Autowired
+    DatabaseService database;
+
+    @Autowired
+    TelegramService telegram;
 
     public void runMonitor() {
 

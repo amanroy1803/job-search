@@ -2,16 +2,16 @@ package com.aman.job_search.service;
 
 import com.aman.job_search.model.Job;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class TelegramService {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private final String token = System.getenv("TELEGRAM_SECRET");
     private final String chatId = System.getenv("TELEGRAM_CHAT_ID");

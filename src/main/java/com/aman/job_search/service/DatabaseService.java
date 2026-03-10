@@ -8,19 +8,24 @@ import java.sql.*;
 @Service
 public class DatabaseService {
 
-    private final Connection conn;
+    private Connection conn;
 
     public DatabaseService() throws Exception {
 
-        conn = DriverManager.getConnection("jdbc:sqlite:jobs.db");
-        Statement stmt = conn.createStatement();
-        stmt.execute("""
-                CREATE TABLE IF NOT EXISTS jobs (
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:jobs.db");
+            Statement stmt = conn.createStatement();
+            stmt.execute("""
+                        CREATE TABLE IF NOT EXISTS jobs (
                             id TEXT PRIMARY KEY,
                             title TEXT,
                             company TEXT,
                             url TEXT
-                """);
+                        )
+                    """);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to initialize db", e);
+        }
     }
 
     public boolean exists(String id) throws Exception {

@@ -4,6 +4,7 @@ import com.aman.job_search.model.GreenHouseResponse;
 import com.aman.job_search.model.Job;
 import com.aman.job_search.model.LeverPosting;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,10 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class JobFetcherService {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate=new RestTemplate();
 
     public List<Job> fetchGreenhouseJobs(String company) {
 

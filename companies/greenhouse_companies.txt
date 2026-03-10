@@ -1,6 +1,4 @@
 stripe
 datadog
 airbnb
-notion
-shopify
 coinbase
