@@ -1,8 +1,6 @@
 package com.aman.job_search.service;
 
 import com.aman.job_search.model.Job;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

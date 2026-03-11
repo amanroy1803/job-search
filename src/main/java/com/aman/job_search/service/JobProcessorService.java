@@ -2,7 +2,6 @@ package com.aman.job_search.service;
 
 import com.aman.job_search.model.Job;
 import com.aman.job_search.utils.JobFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +10,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class JobProcessorService {
@@ -33,12 +34,14 @@ public class JobProcessorService {
             List<String> lever = Files.readAllLines(
                     Path.of("companies/lever_companies.txt"));
 
+            ExecutorService executorService = Executors.newFixedThreadPool(20);
+
             List<CompletableFuture<List<Job>>> futures = new ArrayList<>();
 
             for (String company : greenhouse) {
                 futures.add(
                         CompletableFuture.supplyAsync(
-                                () -> fetcher.fetchGreenhouseJobs(company)
+                                () -> fetcher.fetchGreenhouseJobs(company), executorService
                         )
                 );
             }
@@ -46,15 +49,18 @@ public class JobProcessorService {
             for (String company : lever) {
                 futures.add(
                         CompletableFuture.supplyAsync(
-                                () -> fetcher.fetchLeverJobs(company)
+                                () -> fetcher.fetchLeverJobs(company), executorService
                         )
                 );
             }
 
-            List<Job> jobs = futures.stream()
-                    .map(CompletableFuture::join)
-                    .flatMap(List::stream)
-                    .toList();
+            List<Job> jobs = new ArrayList<>();
+            if (!futures.isEmpty()) {
+                jobs = futures.stream()
+                        .map(CompletableFuture::join)
+                        .flatMap(List::stream)
+                        .toList();
+            }
 
             process(jobs);
 
